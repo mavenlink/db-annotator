@@ -1,0 +1,6 @@
+root:
+  host: mysql.mavenlink.link
+  username: root
+  password: password
+  database: mysql
+  port: 32424

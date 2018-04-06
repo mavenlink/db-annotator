@@ -1,3 +1,4 @@
 module DbAnnotator
-  # Your code goes here...
+  COMMENT_PREFIX = "/*TAG"
+  COMMENT_SUFFIX = "TAG*/"
 end

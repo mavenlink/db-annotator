@@ -1,11 +1,12 @@
-require 'active_record'
-require 'mysql2'
+require "active_record/connection_adapters/mysql2_adapter"
+require "db_annotator"
+require "mysql2"
 
 module ActiveRecord
   class Base
     class << self
       # Copied from activerecord-4.2.10/lib/active_record/connection_adapters/mysql2_adapter.rb
-      # Replaced ConnectionAdapters::Mysql2Adaptor with ConnectionAdapters::Mysql2AnnotatorAdaptor
+      # Replaced ConnectionAdapters::Mysql2Adapter with ConnectionAdapters::Mysql2AnnotatorAdapter
       # Cried a little bit into our keyboards.
       def mysql2_annotator_connection(config)
         config = config.symbolize_keys
@@ -18,7 +19,7 @@ module ActiveRecord
 
         client = Mysql2::Client.new(config)
         options = [config[:host], config[:username], config[:password], config[:database], config[:port], config[:socket], 0]
-        ConnectionAdapters::Mysql2AnnotatorAdaptor.new(client, logger, options, config)
+        ConnectionAdapters::Mysql2AnnotatorAdapter.new(client, logger, options, config)
       rescue Mysql2::Error => error
         if error.message.include?("Unknown database")
           raise ActiveRecord::NoDatabaseError.new(error.message, error)
@@ -30,20 +31,23 @@ module ActiveRecord
   end
 
   module ConnectionAdapters
-    class Mysql2AnnotatorAdaptor < Mysql2Adaptor
-      ADAPTER_NAME = 'Mysql2Annotator'.freeze
+    class Mysql2AnnotatorAdapter < Mysql2Adapter
+      ADAPTER_NAME = "Mysql2Annotator".freeze
 
-      # The object that stores the annotations to include with each SQL query via a comment
-      attr_reader :annotation
+      def annotation=(value)
+        @annotation = value
+        @annotation_comment = nil
+      end
 
-      def initialize(*)
-        @annotation = nil
+      def execute(sql, name = nil)
+        sql = annotation_comment + sql unless @annotation.nil?
         super
       end
 
-      # Returns the human-readable name of the adapter.
-      def adapter_name
-        ADAPTER_NAME
+      private
+
+      def annotation_comment
+        @annotation_comment ||= DbAnnotator::COMMENT_PREFIX + @annotation.to_json + DbAnnotator::COMMENT_SUFFIX
       end
     end
   end
