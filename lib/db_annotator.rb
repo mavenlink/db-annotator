@@ -1,0 +1,3 @@
+module DbAnnotator
+  # Your code goes here...
+end
