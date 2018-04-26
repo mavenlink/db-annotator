@@ -1,6 +1,7 @@
 require "spec_helper"
 require "pry"
 require "db_annotator"
+require "db_annotator/version"
 
 
 describe DbAnnotator do

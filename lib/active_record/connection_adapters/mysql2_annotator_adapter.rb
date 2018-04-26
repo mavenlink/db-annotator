@@ -34,6 +34,10 @@ module ActiveRecord
     class Mysql2AnnotatorAdapter < Mysql2Adapter
       ADAPTER_NAME = "Mysql2Annotator".freeze
 
+      def annotation
+        @annotation
+      end
+
       def annotation=(value)
         @annotation = value
         @annotation_comment = nil
