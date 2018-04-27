@@ -22,6 +22,11 @@ describe DbAnnotator do
     expect(DbAnnotator::VERSION).not_to be nil
   end
 
+  it "rejects annotations containing */" do
+    @connection.annotation = { x: "value1", "*/": "value2" }
+    expect(@connection.annotation).to eq(nil)
+  end
+
   context "when there is an annotation" do
     before do
       @connection.annotation = "foo"

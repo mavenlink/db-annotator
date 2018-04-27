@@ -39,6 +39,7 @@ module ActiveRecord
       end
 
       def annotation=(value)
+        return if value.to_json.include?("*/")
         @annotation = value
         @annotation_comment = nil
       end
