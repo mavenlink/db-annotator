@@ -27,6 +27,14 @@ describe DbAnnotator do
     expect(@connection.annotation).to eq(nil)
   end
 
+  it "makes an immutable copy of the annotation" do
+    data = { a: 7 }
+    @connection.annotation = data
+    data[:a] = 8
+    run_query
+    check_for_annotation({ a: 7 })
+  end
+
   context "when there is an annotation" do
     before do
       @connection.annotation = "foo"
