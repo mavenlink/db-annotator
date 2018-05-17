@@ -32,7 +32,7 @@ module ActiveRecord
 
   module ConnectionAdapters
     class Mysql2AnnotatorAdapter < Mysql2Adapter
-      ADAPTER_NAME = 'Mysql2'.freeze
+      ADAPTER_NAME = 'Mysql2Annotator'.freeze
 
       def annotation
         @annotation
