@@ -44,14 +44,20 @@ module ActiveRecord
       end
 
       def execute(sql, name = nil)
-        sql = annotation_comment + sql unless @annotation.nil?
+        sql = annotation_comment + sql
         super
       end
 
       private
 
       def annotation_comment
-        @annotation_comment ||= DbAnnotator::COMMENT_PREFIX + @annotation.to_json + DbAnnotator::COMMENT_SUFFIX
+        @annotation_comment ||= begin
+          if @annotation
+            DbAnnotator::COMMENT_PREFIX + @annotation.to_json + DbAnnotator::COMMENT_SUFFIX
+          else
+            ""
+          end
+        end
       end
     end
   end
