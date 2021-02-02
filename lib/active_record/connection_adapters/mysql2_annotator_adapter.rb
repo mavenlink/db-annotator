@@ -22,7 +22,7 @@ module ActiveRecord
         ConnectionAdapters::Mysql2AnnotatorAdapter.new(client, logger, options, config)
       rescue Mysql2::Error => error
         if error.message.include?("Unknown database")
-          raise ActiveRecord::NoDatabaseError.new(error.message, error)
+          raise ActiveRecord::NoDatabaseError.new(error.message)
         else
           raise
         end
