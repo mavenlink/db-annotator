@@ -20,7 +20,6 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency "mysql2", ">= 0.4"
 
-  spec.add_development_dependency "bundler", "~> 2.4"
   spec.add_development_dependency "rake", "~> 10.0"
   spec.add_development_dependency "rspec", "~> 3.0"
   spec.add_development_dependency "db-query-matchers"
