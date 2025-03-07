@@ -43,9 +43,17 @@ module ActiveRecord
         annotation_comment
       end
 
-      def execute(sql, name = nil)
-        sql = annotation_comment + sql unless @annotation.nil?
-        super
+      if ActiveRecord::VERSION::MAJOR >= 7
+        # see activerecord-7.0.8.7/lib/active_record/connection_adapters/abstract_mysql_adapter.rb:202
+        def execute(sql, name = nil, async: false)
+          sql = annotation_comment + sql unless @annotation.nil?
+          super
+        end
+      else
+        def execute(sql, name = nil)
+          sql = annotation_comment + sql unless @annotation.nil?
+          super
+        end
       end
 
       private
